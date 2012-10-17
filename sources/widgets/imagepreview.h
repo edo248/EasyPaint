@@ -40,9 +40,16 @@ public slots:
     
 protected:
     virtual void paintEvent(QPaintEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     QImage *mImage;
+    QPoint mFirstPoint;
+    QPoint mSecondPoint;
+
+    bool mMoving;
 };
 
 #endif // IMAGEPREVIEW_H

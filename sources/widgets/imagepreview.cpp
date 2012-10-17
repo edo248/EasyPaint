@@ -25,6 +25,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QImage>
 
 #include "imagepreview.h"
@@ -33,6 +34,8 @@ ImagePreview::ImagePreview(QImage *image, QWidget *parent) :
     QWidget(parent)
 {
     mImage = image;
+    mMoving = false;
+    setCursor(Qt::OpenHandCursor);
 }
 
 void ImagePreview::paintEvent(QPaintEvent *event)
@@ -40,9 +43,33 @@ void ImagePreview::paintEvent(QPaintEvent *event)
     if(mImage)
     {
         QPainter *painter = new QPainter(this);
+        QRect rect(mFirstPoint - mSecondPoint, event->rect().size());
 
-        painter->drawImage(event->rect(), *mImage, event->rect());
+        painter->drawImage(event->rect(), *mImage, rect);
 
         painter->end();
     }
+}
+
+void ImagePreview::mousePressEvent(QMouseEvent *event)
+{
+    mMoving = true;
+    setCursor(Qt::ClosedHandCursor);
+
+    mFirstPoint = event->pos();
+}
+
+void ImagePreview::mouseMoveEvent(QMouseEvent *event)
+{
+    if(!mMoving)
+        return;
+
+    mSecondPoint = event->pos();
+    update();
+}
+
+void ImagePreview::mouseReleaseEvent(QMouseEvent *event)
+{
+    mMoving = false;
+    setCursor(Qt::OpenHandCursor);
 }
