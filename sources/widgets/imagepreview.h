@@ -46,9 +46,10 @@ protected:
 
 private:
     QImage *mImage;
-    QPoint mFirstPoint;
-    QPoint mSecondPoint;
 
+    QPoint mTopLeft;
+    QPoint mTopLeftCurrent;
+    QPoint mFirstPoint;
     bool mMoving;
 };
 

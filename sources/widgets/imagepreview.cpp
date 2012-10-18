@@ -31,10 +31,11 @@
 #include "imagepreview.h"
 
 ImagePreview::ImagePreview(QImage *image, QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent), mFirstPoint(0, 0), mTopLeft(0, 0), mTopLeftCurrent(mTopLeft)
 {
     mImage = image;
     mMoving = false;
+
     setCursor(Qt::OpenHandCursor);
 }
 
@@ -43,7 +44,9 @@ void ImagePreview::paintEvent(QPaintEvent *event)
     if(mImage)
     {
         QPainter *painter = new QPainter(this);
-        QRect rect(mFirstPoint - mSecondPoint, event->rect().size());
+
+        // TODO: add check of image bounds
+        QRect rect(mTopLeftCurrent, event->rect().size());
 
         painter->drawImage(event->rect(), *mImage, rect);
 
@@ -64,7 +67,7 @@ void ImagePreview::mouseMoveEvent(QMouseEvent *event)
     if(!mMoving)
         return;
 
-    mSecondPoint = event->pos();
+    mTopLeftCurrent = mTopLeft + mFirstPoint - event->pos();
     update();
 }
 
@@ -72,4 +75,5 @@ void ImagePreview::mouseReleaseEvent(QMouseEvent *event)
 {
     mMoving = false;
     setCursor(Qt::OpenHandCursor);
+    mTopLeft += mFirstPoint - event->pos();mTopLeftCurrent = mTopLeft;
 }
