@@ -45,10 +45,7 @@ void ImagePreview::paintEvent(QPaintEvent *event)
     {
         QPainter *painter = new QPainter(this);
 
-        // TODO: add check of image bounds
-        QRect rect(mTopLeftCurrent, event->rect().size());
-
-        painter->drawImage(event->rect(), *mImage, rect);
+        painter->drawImage(event->rect(), *mImage, QRect(mTopLeftCurrent, event->rect().size()));
 
         painter->end();
     }
@@ -68,6 +65,8 @@ void ImagePreview::mouseMoveEvent(QMouseEvent *event)
         return;
 
     mTopLeftCurrent = mTopLeft + mFirstPoint - event->pos();
+    limitsImageBounds(mTopLeftCurrent);
+
     update();
 }
 
@@ -75,5 +74,23 @@ void ImagePreview::mouseReleaseEvent(QMouseEvent *event)
 {
     mMoving = false;
     setCursor(Qt::OpenHandCursor);
-    mTopLeft += mFirstPoint - event->pos();mTopLeftCurrent = mTopLeft;
+
+    mTopLeft += mFirstPoint - event->pos();
+    limitsImageBounds(mTopLeft);
+    mTopLeftCurrent = mTopLeft;
+}
+
+void ImagePreview::limitsImageBounds(QPoint &topLeft)
+{
+    if(topLeft.x() < 0)
+        topLeft.setX(0);
+
+    if(topLeft.y() < 0)
+        mTopLeftCurrent.setY(0);
+
+    if(topLeft.x() + rect().size().width() >= mImage->width())
+        topLeft.setX(mImage->width() - rect().size().width());
+
+    if(topLeft.y() + rect().size().height() >= mImage->height())
+        topLeft.setY(mImage->height() - rect().size().height());
 }

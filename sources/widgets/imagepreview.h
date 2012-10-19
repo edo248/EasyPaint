@@ -28,15 +28,15 @@
 
 #include <QtGui/QWidget>
 
+/**
+ * @brief Widget for image preview in effect's dialogs.
+ *
+ */
 class ImagePreview : public QWidget
 {
     Q_OBJECT
 public:
     explicit ImagePreview(QImage *image, QWidget *parent);
-    
-signals:
-    
-public slots:
     
 protected:
     virtual void paintEvent(QPaintEvent *event);
@@ -45,11 +45,13 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
+    void limitsImageBounds(QPoint &topLeft);
+
     QImage *mImage;
 
+    QPoint mFirstPoint;
     QPoint mTopLeft;
     QPoint mTopLeftCurrent;
-    QPoint mFirstPoint;
     bool mMoving;
 };
 
