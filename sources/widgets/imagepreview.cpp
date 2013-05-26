@@ -23,10 +23,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QImage>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QImage>
 
 #include "imagepreview.h"
 

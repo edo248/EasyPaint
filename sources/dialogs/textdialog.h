@@ -28,7 +28,7 @@
 
 #include "../imagearea.h"
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QTextEdit>
 
 /**
@@ -45,7 +45,7 @@ public:
      *
      * @param parent Pointer for parent.
      */
-    explicit TextDialog(ImageArea *parent = 0);
+    explicit TextDialog(QString text, ImageArea *parent = 0);
    
 private:
     void initializeGui();

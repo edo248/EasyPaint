@@ -27,18 +27,25 @@
 #include "../imagearea.h"
 #include "../datasingleton.h"
 
-#include <QtGui/QPushButton>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QFont>
-#include <QtGui/QFontDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QMessageBox>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QFont>
+#include <QFontDialog>
+#include <QDialogButtonBox>
+#include <QMessageBox>
 
-TextDialog::TextDialog(ImageArea *parent) :
+TextDialog::TextDialog(QString text, ImageArea *parent) :
     QDialog(parent)
 {
     initializeGui();
+    if (!text.isEmpty())
+    {
+        mTextEdit->setText(text);
+        QTextCursor cursor(mTextEdit->textCursor());
+        cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+        mTextEdit->setTextCursor(cursor);
+    }
     layout()->setSizeConstraint(QLayout::SetFixedSize);
     setWindowTitle(tr("Text"));
 }
