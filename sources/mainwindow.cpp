@@ -44,6 +44,8 @@
 #include <QUndoGroup>
 #include <QtCore/QTimer>
 #include <QtCore/QMap>
+#include <QTextEdit>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QStringList filePaths, QWidget *parent)
     : QMainWindow(parent), mPrevInstrumentSetted(false)
