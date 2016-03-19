@@ -27,8 +27,11 @@
 #include "widgets/toolbar.h"
 #include "imagearea.h"
 #include "datasingleton.h"
+#include "instruments/lineinstrument.h"
 #include "dialogs/settingsdialog.h"
 #include "widgets/palettebar.h"
+#include "commands.h"
+
 
 #include <QApplication>
 #include <QAction>
@@ -450,11 +453,49 @@ void MainWindow::initializeToolBar()
     connect(mToolbar, SIGNAL(sendClearImageSelection()), this, SLOT(clearImageSelection()));
 }
 
+void MainWindow::passTclText()
+{
+
+    QString input = mTclInput->text();
+    ;
+    if (input == "line") {
+            mInstrumentsActMap[LINE]->trigger();
+
+            ImageArea *i = getCurrentImageArea();
+            draw_line(*i,QPoint(0,0), QPoint(100,100), true);
+    }
+
+    mTclOutput->append(input);
+    mTclInput->setText("");
+}
+
 void MainWindow::initializePaletteBar()
 {
     mPaletteBar = new PaletteBar(mToolbar);
-    addToolBar(Qt::BottomToolBarArea, mPaletteBar);
+    addToolBar(Qt::RightToolBarArea, mPaletteBar);
+
+    mTclInput = new QLineEdit();
+    mTclOutput = new QTextEdit();
+    mTclToolbar = new QToolBar();
+
+    connect(mTclInput, SIGNAL(returnPressed()), this, SLOT(passTclText()));
+
+    mTclOutput->setReadOnly(true);
+    mTclOutput->setText("Output");
+
+    QWidget *consoleWidget = new QWidget(mTclToolbar);
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    consoleWidget->setLayout(layout);
+
+    layout->addWidget(mTclOutput);
+    layout->addWidget(mTclInput);
+
+    mTclToolbar->addWidget(consoleWidget);
+
+    addToolBar(Qt::BottomToolBarArea, mTclToolbar );
 }
+
 
 ImageArea* MainWindow::getCurrentImageArea()
 {

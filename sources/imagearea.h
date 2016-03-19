@@ -163,6 +163,8 @@ public:
      */
     void pushUndoCommand(UndoCommand *command);
     
+    AbstractInstrument* getInstrument(InstrumentsEnum instrument);
+
 private:
     /**
      * @brief Initialize image with base params.

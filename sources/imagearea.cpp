@@ -593,3 +593,8 @@ void ImageArea::pushUndoCommand(UndoCommand *command)
     if(command != 0)
         mUndoStack->push(command);
 }
+
+AbstractInstrument* ImageArea::getInstrument(InstrumentsEnum instrument)
+{
+    return mInstrumentsHandlers[instrument];
+}

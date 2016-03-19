@@ -42,6 +42,16 @@ void FillInstrument::mousePressEvent(QMouseEvent *event, ImageArea &imageArea)
         mStartPoint = mEndPoint = event->pos();
         imageArea.setIsPaint(true);
         makeUndoCommand(imageArea);
+
+        if(event->button() == Qt::LeftButton)
+        {
+            paint(imageArea, false);
+        }
+        else if(event->button() == Qt::RightButton)
+        {
+            paint(imageArea, true);
+        }
+        imageArea.setIsPaint(false);
     }
 }
 

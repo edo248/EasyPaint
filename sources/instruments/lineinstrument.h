@@ -44,10 +44,19 @@ public:
     void mousePressEvent(QMouseEvent *event, ImageArea &imageArea);
     void mouseMoveEvent(QMouseEvent *event, ImageArea &imageArea);
     void mouseReleaseEvent(QMouseEvent *event, ImageArea &imageArea);
+    void paint(ImageArea &imageArea, bool isSecondaryColor = false, bool additionalFlag = false);
+
+
+    void initInstrumentAction(ImageArea &imageArea);
+    void completeInstrumentAction(ImageArea &imageArea);
+
+    void setIsSecondaryColor(bool secondary);
+    void setStartPoint(QPoint inPoint);
+    void setEndPoint(QPoint inPoint);
 
 protected:
-    void paint(ImageArea &imageArea, bool isSecondaryColor = false, bool additionalFlag = false);
-    
+    bool mIsSecondaryColor;
+
 };
 
 #endif // LINEINSTRUMENT_H

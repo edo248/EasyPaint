@@ -40,6 +40,8 @@ class PaletteBar;
 class ImageArea;
 class QLabel;
 class QUndoGroup;
+class QLineEdit;
+class QTextEdit;
 QT_END_NAMESPACE
 
 /**
@@ -97,6 +99,10 @@ private:
     PaletteBar *mPaletteBar;
     QLabel *mSizeLabel, *mPosLabel, *mColorPreviewLabel, *mColorRGBLabel;
 
+    QLineEdit * mTclInput;
+    QTextEdit *mTclOutput;
+    QToolBar * mTclToolbar;
+
     QMap<InstrumentsEnum, QAction*> mInstrumentsActMap;
     QMap<EffectsEnum, QAction*> mEffectsActMap;
     QAction *mSaveAction, *mSaveAsAction, *mCloseAction, *mPrintAction,
@@ -144,6 +150,7 @@ private slots:
     void clearImageSelection();
     void restorePreviousInstrument();
     void setInstrument(InstrumentsEnum instrument);
+        void passTclText();
 signals:
     void sendInstrumentChecked(InstrumentsEnum);
 

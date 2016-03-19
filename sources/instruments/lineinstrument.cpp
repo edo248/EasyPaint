@@ -34,16 +34,29 @@
 LineInstrument::LineInstrument(QObject *parent) :
     AbstractInstrument(parent)
 {
+    mIsSecondaryColor = false;
 }
 
 void LineInstrument::mousePressEvent(QMouseEvent *event, ImageArea &imageArea)
 {
     if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
     {
-        mStartPoint = mEndPoint = event->pos();
-        imageArea.setIsPaint(true);
-        mImageCopy = *imageArea.getImage();
-        makeUndoCommand(imageArea);
+        setStartPoint(event->pos());
+        setEndPoint(event->pos());
+
+        if (!imageArea.isPaint())
+        {
+            if(event->button() == Qt::LeftButton)
+            {
+                setIsSecondaryColor(false);
+            }
+            else if(event->button() == Qt::RightButton){
+                setIsSecondaryColor(true);
+            }
+        }
+
+        imageArea.setIsPaint(true); //TODO: move to init
+        initInstrumentAction(imageArea);
     }
 }
 
@@ -51,33 +64,18 @@ void LineInstrument::mouseMoveEvent(QMouseEvent *event, ImageArea &imageArea)
 {
     if(imageArea.isPaint())
     {
-        mEndPoint = event->pos();
+        setEndPoint(event->pos());
         imageArea.setImage(mImageCopy);
-        if(event->buttons() & Qt::LeftButton)
-        {
-            paint(imageArea, false);
-        }
-        else if(event->buttons() & Qt::RightButton)
-        {
-            paint(imageArea, true);
-        }
+        paint(imageArea, mIsSecondaryColor);
     }
 }
 
 void LineInstrument::mouseReleaseEvent(QMouseEvent *event, ImageArea &imageArea)
 {
     if(imageArea.isPaint())
-    {
-        imageArea.setImage(mImageCopy);
-        if(event->button() == Qt::LeftButton)
-        {
-            paint(imageArea, false);
-        }
-        else if(event->button() == Qt::RightButton)
-        {
-            paint(imageArea, true);
-        }
-        imageArea.setIsPaint(false);
+    {        
+        completeInstrumentAction(imageArea);
+        imageArea.setIsPaint(false); //TODO: move to complete
     }
 }
 
@@ -114,4 +112,33 @@ void LineInstrument::paint(ImageArea &imageArea, bool isSecondaryColor, bool)
     //    mPImageArea->update(QRect(mStartPoint, mEndPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
     painter.end();
     imageArea.update();
+}
+
+void LineInstrument::setStartPoint(QPoint inPoint)
+{
+    mStartPoint = inPoint;
+}
+
+void LineInstrument::setEndPoint(QPoint inPoint)
+{
+    mEndPoint = inPoint;
+}
+
+void LineInstrument::completeInstrumentAction(ImageArea &imageArea)
+{
+    imageArea.setImage(mImageCopy);
+    paint(imageArea, mIsSecondaryColor);
+}
+
+void LineInstrument::initInstrumentAction(ImageArea &imageArea)
+{
+
+    mImageCopy = *imageArea.getImage();
+    makeUndoCommand(imageArea);
+}
+
+
+void LineInstrument::setIsSecondaryColor(bool secondary)
+{
+    mIsSecondaryColor = secondary;
 }
